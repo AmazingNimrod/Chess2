@@ -8,11 +8,20 @@ package chess;
  *
  * @author nyima
  */
+import java.awt.Image;
 import java.util.Map;
+import javax.swing.ImageIcon;
 
 class Pawn extends Piece {
+
     Pawn(boolean isWhite) {
         super(isWhite);
+        if (isWhite) {
+            pieceImage = new ImageIcon("white_pawn.png").getImage();
+        } else {
+            pieceImage = new ImageIcon("black_pawn.png").getImage();
+        }
+        pieceImage = pieceImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
     }
 
     @Override
@@ -50,4 +59,3 @@ class Pawn extends Piece {
         return (move.equals(diagonalLeft) || move.equals(diagonalRight)) && boardMap.containsKey(move) && boardMap.get(move).isWhite() != isWhite;
     }
 }
-

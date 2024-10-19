@@ -8,11 +8,20 @@ package chess;
  *
  * @author nyima
  */
+import java.awt.Image;
 import java.util.Map;
+import javax.swing.ImageIcon;
 
 class Bishop extends Piece {
+
     Bishop(boolean isWhite) {
         super(isWhite);
+        if (isWhite) {
+            pieceImage = new ImageIcon("white_bishop.png").getImage();
+        } else {
+            pieceImage = new ImageIcon("black_bishop.png").getImage();
+        }
+        pieceImage = pieceImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
     }
 
     @Override
@@ -20,7 +29,7 @@ class Bishop extends Piece {
         if (isWhite) {
             return ANSI_GREEN + "B" + ANSI_RESET;
         }
-            return ANSI_RED + "B" + ANSI_RESET;
+        return ANSI_RED + "B" + ANSI_RESET;
     }
 
     // used GPT to help generate method
@@ -29,7 +38,7 @@ class Bishop extends Piece {
         int[] posCoords = MoveHelper.moveToInt(pos);
         int[] moveCoords = MoveHelper.moveToInt(move);
 
-        if(pos.equals(move)){
+        if (pos.equals(move)) {
             return false;
         }
 
@@ -56,6 +65,4 @@ class Bishop extends Piece {
         return !boardMap.containsKey(move) || boardMap.get(move).isWhite() != this.isWhite(); // Cannot take a piece of the same color
     }
 
-
 }
-

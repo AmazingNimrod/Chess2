@@ -8,11 +8,19 @@ package chess;
  *
  * @author nyima
  */
+import java.awt.Image;
 import java.util.Map;
+import javax.swing.ImageIcon;
 
 class Rook extends Piece {
     Rook(boolean isWhite) {
         super(isWhite);
+        if (isWhite) {
+            pieceImage=new ImageIcon("white_rook.png").getImage();
+        } else {
+            pieceImage = new ImageIcon("black_rook.png").getImage();
+        }
+        pieceImage = pieceImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
     }
 
     @Override

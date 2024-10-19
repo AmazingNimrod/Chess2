@@ -8,11 +8,20 @@ package chess;
  *
  * @author nyima
  */
+import java.awt.Image;
 import java.util.Map;
+import javax.swing.ImageIcon;
 
 class Knight extends Piece {
+
     Knight(boolean isWhite) {
         super(isWhite);
+        if (isWhite) {
+            pieceImage = new ImageIcon("white_knight.png").getImage();
+        } else {
+            pieceImage = new ImageIcon("black_knight.png").getImage();
+        }
+        pieceImage = pieceImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
     }
 
     @Override
@@ -34,9 +43,7 @@ class Knight extends Piece {
             return false; // Cannot take a piece of the same color
         }
 
-        return (Math.abs(posCoords[0] - moveCoords[0]) == 2 && Math.abs(posCoords[1] - moveCoords[1]) == 1) ||
-                (Math.abs(posCoords[0] - moveCoords[0]) == 1 && Math.abs(posCoords[1] - moveCoords[1]) == 2);
+        return (Math.abs(posCoords[0] - moveCoords[0]) == 2 && Math.abs(posCoords[1] - moveCoords[1]) == 1)
+                || (Math.abs(posCoords[0] - moveCoords[0]) == 1 && Math.abs(posCoords[1] - moveCoords[1]) == 2);
     }
 }
-
-

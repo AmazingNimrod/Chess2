@@ -8,10 +8,12 @@ package chess;
  *
  * @author nyima
  */
+import java.awt.Image;
 import java.util.Map;
 
 public abstract class Piece {
     final boolean isWhite;
+    public Image pieceImage;
 
     public Piece(boolean isWhite) {
         this.isWhite = isWhite;

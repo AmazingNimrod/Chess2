@@ -8,11 +8,19 @@ package chess;
  *
  * @author nyima
  */
+import java.awt.Image;
 import java.util.Map;
+import javax.swing.ImageIcon;
 
 class Queen extends Piece {
     Queen(boolean isWhite) {
         super(isWhite);
+                if (isWhite) {
+            pieceImage=new ImageIcon("white_queen.png").getImage();
+        } else {
+            pieceImage = new ImageIcon("black_queen.png").getImage();
+        }
+        pieceImage = pieceImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
     }
 
     @Override
