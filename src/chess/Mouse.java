@@ -8,11 +8,11 @@ package chess;
  *
  * @author nyima
  */
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Mouse extends MouseAdapter {
+
     private Panel panel;
 
     public Mouse(Panel panel) {
@@ -25,20 +25,21 @@ public class Mouse extends MouseAdapter {
         int y = e.getY();
 
         int row = x / 100;
-        int col = 8 - (y - 100) / 100;
+        int col = y / 100;
 
         if (row > 0 && row <= 8 && col > 0 && col <= 8) {
             panel.selectedRow = row;
             panel.selectedCol = col;
-            System.out.println("Clicked square: "+ toChessNotation(row, col));
-            System.out.println("Clicked square: "+ col);
+            System.out.println("Clicked square: " + toChessNotation(row, col));
+            System.out.println("Clicked square(x, y): " + row + ", " + col);
             panel.selectedSquare = toChessNotation(row, col);
             panel.repaint();
         }
     }
+
     private String toChessNotation(int row, int col) {
         char file = (char) ('a' + row - 1);
-        int rank = col;
+        int rank = 9 - col;
         return "" + file + rank;
     }
 }

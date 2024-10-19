@@ -8,11 +8,11 @@ package chess;
  *
  * @author nyima
  */
-
 import javax.swing.*;
 import java.awt.*;
 
 public class Panel extends JPanel {
+    final int scale = 100;
     public Board board = new Board();
     public int selectedRow = 0;
     public int selectedCol = 0;
@@ -20,8 +20,7 @@ public class Panel extends JPanel {
     private final Color chessGreen = Color.decode("#779556");
     private final Color chessWhite = Color.decode("#EBECD0");
 
-
-    public Panel(){
+    public Panel() {
         Mouse mouseHandler = new Mouse(this);
         addMouseListener(mouseHandler);
     }
@@ -34,40 +33,41 @@ public class Panel extends JPanel {
         ShowMoves(g);
     }
 
-    public void ShowMoves(Graphics g){
-        if (board.getPieceAt(selectedSquare) != null){
+    //methods to convert chess move to x,y
+    public int x(String pos) {
+        return MoveHelper.moveToInt(pos)[1] + 1;
+    }
+
+    public int y(String pos) {
+        return MoveHelper.moveToInt(pos)[0] + 1;
+    }
+
+    public void ShowMoves(Graphics g) {
+        if (board.getPieceAt(selectedSquare) != null) {
             StringBuilder moves = MoveHelper.valid(board.boardMap, selectedSquare, board);
             String[] movearr = moves.toString().split(" ");
             System.out.println("valid: " + moves);
-            for (String move : movearr){
+            for (String move : movearr) {
                 if (move.length() < 2) {
                     continue;
                 }
-                int[] t = MoveHelper.moveToInt(move);
                 g.setColor(new Color(255, 255, 0, 100));
-                g.fillRect(scale(t[1]+1), scale(10-t[0]), 100, 100);
+                g.fillRect(scale*x(move), scale*y(move), 100, 100);
             }
         }
     }
 
-    public void paintPieces(Graphics g){
-        for (char c = 'a'; c <= 'h'; c++ ){
-            for (int a = 1; a <= 8; a++){
-                String pos = c+Integer.toString(a);
-                if (board.getPieceAt(pos) != null){
+    public void paintPieces(Graphics g) {
+        for (char c = 'a'; c <= 'h'; c++) {
+            for (int a = 1; a <= 8; a++) {
+                String pos = c + Integer.toString(a);
+                if (board.getPieceAt(pos) != null) {
                     Piece piece = board.getPieceAt(pos);
-                    int[] coords = MoveHelper.moveToInt(pos);
-                    g.drawImage(piece.pieceImage, scale(coords[1])+100, scale(coords[0])+100,this);
+                    g.drawImage(piece.pieceImage, scale*x(pos), scale*y(pos), this);
                 }
             }
         }
     }
-
-    public int scale(int pos){
-        return pos*100;
-    }
-
-
 
     public void paintBoard(Graphics g) {
         g.setColor(Color.red);
@@ -80,14 +80,14 @@ public class Panel extends JPanel {
                 } else {
                     g.setColor(chessGreen);
                 }
-                g.fillRect(scale(row), scale(col), 100, 100);
+                g.fillRect(scale*row, scale*col, 100, 100); // paint squares
 
-                if (row == selectedRow && 9-col == selectedCol) {
+                //paint selected square
+                if (!selectedSquare.equals("") && row == x(selectedSquare) && col == y(selectedSquare)) {
                     g.setColor(new Color(255, 255, 0, 100));
-                    g.fillRect(scale(row), scale(col), 100, 100);
+                    g.fillRect(scale*x(selectedSquare), scale*y(selectedSquare), 100, 100);
                 }
             }
         }
     }
-
 }
