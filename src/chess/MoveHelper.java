@@ -29,6 +29,8 @@ public class MoveHelper {
         if (piece == null) {
             return valid; // if no piece return
         }
+        if ((piece.isWhite && !board.whiteTurn) || (!piece.isWhite && board.whiteTurn))
+            return valid; // only display moves if it is turn
 
         for (char col = 'a'; col <= 'h'; col++) {
             for (int a = 1; a <= 8; a++) { // loop over every position on the board

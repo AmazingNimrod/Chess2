@@ -13,7 +13,7 @@ import java.awt.event.MouseEvent;
 
 public class Mouse extends MouseAdapter {
 
-    private Panel panel;
+    private final Panel panel;
 
     public Mouse(Panel panel) {
         this.panel = panel;
@@ -28,11 +28,19 @@ public class Mouse extends MouseAdapter {
         int col = y / 100;
 
         if (row > 0 && row <= 8 && col > 0 && col <= 8) {
+            String clickedSquare = toChessNotation(row, col);
+            if (panel.selectedSquare.isEmpty()) {
+                if (panel.board.getPieceAt(clickedSquare) != null) {
+                    panel.selectedSquare = clickedSquare;
+                }
+            } else {
+                panel.prevSquare = panel.selectedSquare;
+                panel.selectedSquare = clickedSquare;
+                panel.movePiece();
+            }
+
             panel.selectedRow = row;
             panel.selectedCol = col;
-            System.out.println("Clicked square: " + toChessNotation(row, col));
-            System.out.println("Clicked square(x, y): " + row + ", " + col);
-            panel.selectedSquare = toChessNotation(row, col);
             panel.repaint();
         }
     }
