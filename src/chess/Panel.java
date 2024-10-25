@@ -11,6 +11,8 @@ package chess;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Panel extends JPanel {
 
@@ -20,14 +22,60 @@ public class Panel extends JPanel {
     public int selectedCol = 0;
     public String selectedSquare = "";
     public String prevSquare = "";
+    public String gameState = "none";
     private final Color chessGreen = Color.decode("#779556");
     private final Color chessWhite = Color.decode("#EBECD0");
+    ChessDB db = new ChessDB();
+    User whitePlayer;
+    User blackPlayer = new User(db);
+    public int currentGameId = -1;
 
-    public Panel() {
+    public Panel(User white, User black) {
+        whitePlayer = white;
+        blackPlayer = black;
         Mouse mouseHandler = new Mouse(this);
         addMouseListener(mouseHandler);
+        setLayout(new BorderLayout());
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+
+        JButton saveButton = new JButton("Save Game");
+        JButton loadButton = new JButton("Load Game");
+
+        buttonPanel.add(saveButton);
+        buttonPanel.add(loadButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                saveGame();
+                System.out.println("GAME SAVED");
+            }
+        });
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                loadGame(401);
+                System.out.println("GAME LOADED");
+                repaint();
+            }
+        });
     }
 
+    public void loadGame(int gameId) {
+        board = new Board();
+        this.currentGameId = db.loadGame(gameId, board);
+        repaint();
+    }
+
+    public void saveGame() {
+        db.saveGame(board.moveList, this, currentGameId);
+    }
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -35,6 +83,7 @@ public class Panel extends JPanel {
         paintPieces(g);
         showMoves(g);
         showCheck(g);
+
     }
 
     //methods to convert chess move to x,y
@@ -110,8 +159,11 @@ public class Panel extends JPanel {
 
     public void movePiece() {
         if (!selectedSquare.equals("") && !prevSquare.equals("")) {
-            board.movePiece(prevSquare, selectedSquare);
-
+            boolean moved = board.movePieceSucess(prevSquare, selectedSquare);
+            if (moved) {
+                this.gameState = board.endCondition(board.whiteTurn);
+                System.out.println(this.gameState);
+            }
             if (board.getPieceAt(selectedSquare) != null && board.getPieceAt(prevSquare) == null) {
                 selectedSquare = "";
                 prevSquare = "";

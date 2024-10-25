@@ -8,15 +8,19 @@ package chess;
  *
  * @author nyima
  */
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Board {
+
     public final Map<String, Piece> boardMap; // hashmap to store piece and pos
     boolean whiteTurn; // whos turn it is
+    ArrayList<String> moveList;
 
     public Board() { // default board
         boardMap = new HashMap<>();
+        moveList = new ArrayList<>();
         initializeBoard();
         whiteTurn = true;
     }
@@ -68,7 +72,7 @@ public class Board {
             return;
         }
         for (String st : split) { // check if is valid move
-            if (st.equals(move)){
+            if (st.equals(move)) {
                 boardMap.remove(piecePosition);
                 boardMap.put(move, piece);
                 whiteTurn = !whiteTurn;
@@ -76,20 +80,31 @@ public class Board {
             }
         }
         System.out.println("Invalid move");
+    }
 
-//        if (!piece.testValid(boardMap, piecePosition, move)) { // use piece logic to check if move is valid for piece
-//            System.out.println("Invalid move");
-//            return;
-//        }
-//        boardMap.remove(piecePosition);
-//        boardMap.put(move, piece);
-//        if (isInCheck(whiteTurn)){
-//            System.out.println("Invalid move in check");
-//            boardMap.remove(move);
-//            boardMap.put(piecePosition, piece);
-//            return;
-//        }
-//        whiteTurn = !whiteTurn;
+    public boolean movePieceSucess(String piecePosition, String move) {
+        Piece piece = boardMap.get(piecePosition);
+        String s = String.valueOf(MoveHelper.valid(boardMap, piecePosition, this));
+        String[] split = s.split(" ");
+        if (piece == null) { // check if contains piece
+            System.out.println("Invalid piece position");
+            return false;
+        }
+        if (whiteTurn != piece.isWhite()) { //check piece is color of turn
+            System.out.println("Invalid turn");
+            return false;
+        }
+        for (String st : split) { // check if is valid move
+            if (st.equals(move)) {
+                boardMap.remove(piecePosition);
+                boardMap.put(move, piece);
+                whiteTurn = !whiteTurn;
+                moveList.add(piecePosition + " " + move);
+                return true;
+            }
+        }
+        System.out.println("Invalid move");
+        return false;
     }
 
     public boolean isInCheck(boolean whiteKing) {
@@ -155,10 +170,14 @@ public class Board {
                             }
                         }
                     }
-                    if (hasValidMove) break;
+                    if (hasValidMove) {
+                        break;
+                    }
                 }
             }
-            if (hasValidMove) break;
+            if (hasValidMove) {
+                break;
+            }
         }
 
         if (!hasValidMove) { // check if there are no valid moves left
@@ -171,8 +190,6 @@ public class Board {
 
         return "none";
     }
-
-
 
     public void printBoard() {
         System.out.print("    ");
