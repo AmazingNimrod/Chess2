@@ -224,6 +224,7 @@ public class ChessDB {
                     String to = moveComponents[1];
                     board.movePiece(from, to);
                     board.moveList.add(move); // perform move
+                    board.index++;  // added for watching games
                 }
             }
 

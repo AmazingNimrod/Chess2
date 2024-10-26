@@ -34,7 +34,7 @@ class GameHistoryPanel extends JPanel {
         JButton loadButton = new JButton("Load Selected Game");
         JButton refreshButton = new JButton("Refresh List");
         JPanel buttonPanel = new JPanel();
-        
+
         //add actions for buttons
         loadButton.addActionListener(e -> loadSelectedGame());
         refreshButton.addActionListener(e -> refreshGameList());
@@ -44,7 +44,7 @@ class GameHistoryPanel extends JPanel {
         buttonPanel.add(loadButton);
         buttonPanel.add(refreshButton);
         add(buttonPanel, BorderLayout.SOUTH);
-        
+
         refreshGameList();
     }
 
@@ -66,22 +66,43 @@ class GameHistoryPanel extends JPanel {
         }
     }
 
+    //load or watch game
     private void loadSelectedGame() {
         GameList selected = gameList.getSelectedValue(); // get selected game
         if (selected != null) {
-            User whitePlayer = new User(db);
-            User blackPlayer = new User(db);
-            // set users
-            whitePlayer.login(selected.whitePlayer);
-            blackPlayer.login(selected.blackPlayer);
-            //load game panel
-            JFrame gameFrame = new JFrame("Chess Game: " + selected.gameId);
-            gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            GamePanel gamePanel = new GamePanel(whitePlayer, blackPlayer, db);
-            gamePanel.loadGame(selected.gameId);
-            gameFrame.add(gamePanel);
-            gameFrame.setSize(1000, 1000);
-            gameFrame.setVisible(true);
+            if (gameList.getSelectedValue().result.contains("wins")) {
+                watchGame(selected);
+            } else {
+                playGame(selected);
+            }
         }
+    }
+
+    // loaded the game to gamepanel
+    public void playGame(GameList selected) {
+        User whitePlayer = new User(db);
+        User blackPlayer = new User(db);
+        // set users
+        whitePlayer.login(selected.whitePlayer);
+        blackPlayer.login(selected.blackPlayer);
+        //load game panel
+        JFrame gameFrame = new JFrame("Chess Game: " + selected.gameId);
+        gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        GamePanel gamePanel = new GamePanel(whitePlayer, blackPlayer, db);
+        gamePanel.loadGame(selected.gameId);
+        gameFrame.add(gamePanel);
+        gameFrame.setSize(1000, 1000);
+        gameFrame.setVisible(true);
+    }
+
+    //load game to watch panel
+    public void watchGame(GameList selected) {
+        JFrame gameFrame = new JFrame("Chess Game: " + selected.gameId);
+        gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        WatchPanel gamePanel = new WatchPanel(db);
+        gamePanel.loadGame(selected.gameId);
+        gameFrame.add(gamePanel);
+        gameFrame.setSize(1000, 1000);
+        gameFrame.setVisible(true);
     }
 }

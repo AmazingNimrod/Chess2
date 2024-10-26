@@ -17,10 +17,13 @@ public class Board {
     public final Map<String, Piece> boardMap; // hashmap to store piece and pos
     boolean whiteTurn; // whos turn it is
     ArrayList<String> moveList;
+    int index; // added for watching games
+    HashMap<Integer, Piece> takenPieces; // added for watching games
 
     public Board() { // default board
         boardMap = new HashMap<>();
         moveList = new ArrayList<>();
+        takenPieces = new HashMap<>();
         initializeBoard();
         whiteTurn = true;
     }
@@ -73,6 +76,7 @@ public class Board {
         }
         for (String st : split) { // check if is valid move
             if (st.equals(move)) {
+                takenPieces.put(index, getPieceAt(move)); // added for watching games
                 boardMap.remove(piecePosition);
                 boardMap.put(move, piece);
                 whiteTurn = !whiteTurn;
@@ -96,6 +100,7 @@ public class Board {
         }
         for (String st : split) { // check if is valid move
             if (st.equals(move)) {
+                takenPieces.put(index, getPieceAt(move)); // added for watching games
                 boardMap.remove(piecePosition);
                 boardMap.put(move, piece);
                 whiteTurn = !whiteTurn;
