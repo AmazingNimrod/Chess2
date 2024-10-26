@@ -11,7 +11,8 @@ import java.sql.Timestamp;
  * @author nyima
  */
 public class GameList {
-
+    
+    // object to store game data
     final int gameId;
     final Timestamp date;
     final String whitePlayer;

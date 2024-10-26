@@ -17,28 +17,30 @@ public class StartGamePanel extends JPanel {
     private boolean currentIsWhite = true;
 
     public StartGamePanel(ChessDB db, User current) {
+        //button and checkbox
         JButton button = new JButton("Start");
         JCheckBox box = new JCheckBox("Start As Black?");
         JTextField username = new JTextField(15);
 
         box.addItemListener(e -> {
-            currentIsWhite = e.getStateChange() != 1;
+            currentIsWhite = e.getStateChange() != 1; // in checked current user will start as black
         });
 
         button.addActionListener(e -> {
-            if (username.getText().matches("[a-zA-Z0-9]+")) {
-                if (currentIsWhite) {
+            if (username.getText().matches("[a-zA-Z0-9]+")) { // get valid username
+                if (currentIsWhite) { // set users
                     white = current;
                     black = new User(db);
                     black.login(username.getText());
-                } else {
+                } else { // set users
                     black = current;
                     white = new User(db);
                     white.login(username.getText());
                 }
                 System.out.println("White player: " + white.username);
                 System.out.println("Black player: " + black.username);
-
+                
+                //new game
                 JFrame gameFrame = new JFrame("Chess Game");
                 gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 gameFrame.add(new GamePanel(white, black, db));
@@ -46,7 +48,8 @@ public class StartGamePanel extends JPanel {
                 gameFrame.setVisible(true);
             }
         });
-
+        
+        //add components
         add(box);
         add(new JLabel("Opponent Username:"));
         add(username);

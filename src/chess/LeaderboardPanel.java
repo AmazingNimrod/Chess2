@@ -23,20 +23,20 @@ public class LeaderboardPanel extends JPanel {
     ChessDB db;
 
     public LeaderboardPanel(ChessDB db) {
-        this.db = db;
-        setLayout(new BorderLayout());
+        this.db = db; // db
+        setLayout(new BorderLayout()); // border layout
         leaderText = new JTextArea();
         leaderText.setEditable(false);
-        loadLeaderboard();
-        add(new JScrollPane(leaderText));
+        loadLeaderboard(); // load leaderboard
+        add(new JScrollPane(leaderText)); // make scrollable
     }
 
     private void loadLeaderboard() {
         try {
-            ResultSet rs = db.getUsers();
+            ResultSet rs = db.getUsers(); // get all users
             while (rs.next()) {
                 leaderText.append(rs.getString("username")
-                        + " - Rating: " + rs.getInt("rating") + "\n");
+                        + " - Rating: " + rs.getInt("rating") + "\n"); // add username and rating to leaderboard
             }
             rs.close();
         } catch (SQLException ex) {

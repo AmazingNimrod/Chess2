@@ -18,19 +18,23 @@ class LoginPanel extends JDialog {
     public LoginPanel(Frame parent, User user) {
         super(parent, "Login", true);
 
-        setLayout(new FlowLayout());
+        setLayout(new FlowLayout()); // use flow layout
 
-        usernameField = new JTextField(15);
-        JButton loginButton = new JButton("Login");
+        usernameField = new JTextField(15); // username field
+        JButton loginButton = new JButton("Login"); //login button
 
         loginButton.addActionListener(e -> {
-            if (usernameField.getText().matches("[a-zA-Z0-9]+")) {
-                if (user.login(usernameField.getText())) {
+            if (usernameField.getText().matches("[a-zA-Z0-9]+")) { // check for character and nums 
+                if (!user.userExists(usernameField.getText())) // if the user doesnt exist prompt user that new user is being created
+                    JOptionPane.showMessageDialog(this, "User not found in database. New user will be created");
+                if (user.login(usernameField.getText())) { // login
                     loginSuccess = true;
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Login failed");
+                    JOptionPane.showMessageDialog(this, "Login failed"); // unsucessful login
                 }
+            } else{ // prompt for correct input
+                JOptionPane.showMessageDialog(this, "Invalid username. Please enter only characters and numbers");
             }
         });
 

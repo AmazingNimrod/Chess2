@@ -27,6 +27,8 @@ public class Chess {
         if (loginDialog.isSucceeded()) {
             MainMenu menu = new MainMenu(userAuth, db);
             menu.setVisible(true);
+        } else{
+            System.exit(0);
         }
     }
 }

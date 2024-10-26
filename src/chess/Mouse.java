@@ -21,12 +21,15 @@ public class Mouse extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        //get x and y from mouse
         int x = e.getX();
         int y = e.getY();
-
+        
+        //calculate square
         int row = x / 100;
         int col = y / 100;
 
+        //logic for mouse prev and current square needed to move piece
         if (row > 0 && row <= 8 && col > 0 && col <= 8) {
             String clickedSquare = toChessNotation(row, col);
             if (panel.selectedSquare.isEmpty()) {
@@ -44,7 +47,8 @@ public class Mouse extends MouseAdapter {
             panel.repaint();
         }
     }
-
+    
+    //convert xy to chess notation
     private String toChessNotation(int row, int col) {
         char file = (char) ('a' + row - 1);
         int rank = 9 - col;

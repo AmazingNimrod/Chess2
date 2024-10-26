@@ -16,17 +16,19 @@ public class DBManager {
 
     private static final String userName = "chessdb";
     private static final String password = "chessdb";
-    private static final String url = "jdbc:derby:ChessDB_Ebd; create=true";
+    private static final String url = "jdbc:derby:ChessDB_Ebd; create=true"; // embedded database
     Connection conn;
 
     public DBManager() {
         establishConnection();
     }
 
+    //get conn
     public Connection getConnection() {
         return this.conn;
     }
 
+    //connect to db
     public void establishConnection() {
         try {
             conn = DriverManager.getConnection(url, userName, password);
@@ -36,6 +38,7 @@ public class DBManager {
         }
     }
 
+    //close connection
     public void closeConnections() {
         if (conn != null) {
             try {
