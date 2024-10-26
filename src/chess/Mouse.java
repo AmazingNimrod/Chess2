@@ -13,9 +13,9 @@ import java.awt.event.MouseEvent;
 
 public class Mouse extends MouseAdapter {
 
-    private final Panel panel;
+    private final GamePanel panel;
 
-    public Mouse(Panel panel) {
+    public Mouse(GamePanel panel) {
         this.panel = panel;
     }
 

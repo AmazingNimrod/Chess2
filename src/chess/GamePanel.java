@@ -11,10 +11,8 @@ package chess;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Panel extends JPanel {
+public class GamePanel extends JPanel {
 
     final int scale = 100;
     public Board board = new Board();
@@ -25,45 +23,18 @@ public class Panel extends JPanel {
     public String gameState = "none";
     private final Color chessGreen = Color.decode("#779556");
     private final Color chessWhite = Color.decode("#EBECD0");
-    ChessDB db = new ChessDB();
+    ChessDB db;
     User whitePlayer;
-    User blackPlayer = new User(db);
+    User blackPlayer;
     public int currentGameId = -1;
 
-    public Panel(User white, User black) {
-        whitePlayer = white;
-        blackPlayer = black;
+    public GamePanel(User white, User black, ChessDB db) {
+        this.whitePlayer = white;
+        this.blackPlayer = black;
+        this.db = db;
         Mouse mouseHandler = new Mouse(this);
         addMouseListener(mouseHandler);
-        setLayout(new BorderLayout());
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
 
-        JButton saveButton = new JButton("Save Game");
-        JButton loadButton = new JButton("Load Game");
-
-        buttonPanel.add(saveButton);
-        buttonPanel.add(loadButton);
-
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                saveGame();
-                System.out.println("GAME SAVED");
-            }
-        });
-        loadButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                loadGame(401);
-                System.out.println("GAME LOADED");
-                repaint();
-            }
-        });
     }
 
     public void loadGame(int gameId) {
@@ -75,7 +46,7 @@ public class Panel extends JPanel {
     public void saveGame() {
         db.saveGame(board.moveList, this, currentGameId);
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -111,7 +82,7 @@ public class Panel extends JPanel {
     }
 
     public void showCheck(Graphics g) {
-        String kingPos = null;
+        String kingPos;
         if (board.isInCheck(board.whiteTurn)) {
             for (Map.Entry<String, Piece> entry : board.boardMap.entrySet()) { //loop over all pieces
                 if (entry.getValue() instanceof King && entry.getValue().isWhite() == board.whiteTurn) { // look for king of right colour
@@ -162,7 +133,11 @@ public class Panel extends JPanel {
             boolean moved = board.movePieceSucess(prevSquare, selectedSquare);
             if (moved) {
                 this.gameState = board.endCondition(board.whiteTurn);
+                db.saveGame(board.moveList, this, currentGameId);
                 System.out.println(this.gameState);
+                if (!"none".equals(this.gameState)) {
+                    endGame();
+                }
             }
             if (board.getPieceAt(selectedSquare) != null && board.getPieceAt(prevSquare) == null) {
                 selectedSquare = "";
@@ -171,4 +146,24 @@ public class Panel extends JPanel {
             repaint();
         }
     }
+
+    public void endGame() {
+        String result = null;
+        if ("Checkmate".equals(this.gameState)){
+            if (!board.whiteTurn){
+                System.out.println("WHITE WINS");
+                result = whitePlayer.username + " wins";
+
+            }else{
+                System.out.println("BLACK WINS");
+                result = blackPlayer.username + " wins";
+            }
+        }
+        if ("Stalemate".equals(this.gameState)){
+            System.out.println("DRAW");
+            result = "Draw";
+        }
+        db.endGame(currentGameId, result);
+    }
+
 }

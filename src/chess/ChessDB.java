@@ -142,7 +142,7 @@ public class ChessDB {
         return -1;
     }
 
-    public void saveGame(ArrayList<String> moveList, Panel p, int gameId) {
+    public void saveGame(ArrayList<String> moveList, GamePanel p, int gameId) {
         try {
             statement = conn.createStatement();
 
@@ -165,9 +165,9 @@ public class ChessDB {
             for (int i = 0; i < moveList.size(); i++) {
                 String move = moveList.get(i);
                 String colour;
-                if (i % 2 == 0){
+                if (i % 2 == 0) {
                     colour = "White";
-                } else{
+                } else {
                     colour = "Black";
                 }
 
@@ -228,12 +228,64 @@ public class ChessDB {
         }
     }
 
+    public void endGame(int gameId, String result) {
+        try {
+            statement = conn.createStatement();
+            String updateQuery = "UPDATE SavedGames SET result = '" + result + "' "
+                    + "WHERE game_id = " + gameId;
+            statement.executeUpdate(updateQuery);
+            updateQuery = "SELECT white_user_id, black_user_id FROM SavedGames WHERE game_id = " + gameId;
+            ResultSet rs = statement.executeQuery(updateQuery);
+            if (rs.next()) {
+                int whiteId = rs.getInt("white_user_id");
+                int blackId = rs.getInt("black_user_id");
+
+                if (result.contains("wins")) {
+                    if (result.contains(getUsername(whiteId))) {
+                        updatePlayerRating(whiteId, 20);
+                        updatePlayerRating(blackId, -20);
+                    } else {
+                        updatePlayerRating(whiteId, -20);
+                        updatePlayerRating(blackId, 20);
+                    }
+                }
+            }
+            System.out.println("Game ended successfully: " + result);
+        } catch (SQLException ex) {
+            Logger.getLogger(ChessDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updatePlayerRating(int userId, int ratingChange) {
+        try {
+            statement = conn.createStatement();
+            String updateQuery = "UPDATE UserProfile SET rating = rating + " + ratingChange
+                    + " WHERE id = " + userId;
+            statement.executeUpdate(updateQuery);
+        } catch (SQLException ex) {
+            Logger.getLogger(ChessDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String getUsername(int id) {
+        try {
+            statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT username, rating FROM UserProfile WHERE id = "+id);
+            if (rs.next()){
+                return rs.getString("username");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ChessDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public ResultSet getGameList(User user) {
         ResultSet rs = null;
         try {
             statement = conn.createStatement();
             rs = statement.executeQuery(
-                    "SELECT game_id, game_date, "
+                    "SELECT game_id, game_date, result, "
                     + "(SELECT username FROM UserProfile WHERE id = white_user_id) as white_player, "
                     + "(SELECT username FROM UserProfile WHERE id = black_user_id) as black_player "
                     + "FROM SavedGames "

@@ -31,4 +31,8 @@ public class User {
             return true;
         }
     }
+    
+    public void reloadRating(){
+        this.rating = db.getIntWhere("rating", "UserProfile", "username", username);
+    }
 }
