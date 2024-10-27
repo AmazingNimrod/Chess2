@@ -1,7 +1,7 @@
-Sun Oct 27 15:28:44 NZDT 2024 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
+Sun Oct 27 16:19:03 NZDT 2024 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Sun Oct 27 15:28:47 NZDT 2024:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0192-cbcd-f17f-000017f54036 
+Sun Oct 27 16:19:03 NZDT 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0192-cbfc-006b-000017f54036 
 on database directory C:\Users\nyima\OneDrive\UNI Files\Chess\ChessDB_Ebd with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
 Loaded from file:/C:/Users/nyima/OneDrive/UNI%20Files/db-derby-10.14.2.0-bin/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -13,8 +13,8 @@ os.version=10.0
 derby.system.home=C:\Users\nyima\OneDrive\UNI Files\Chess
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Sun Oct 27 15:29:33 NZDT 2024: Shutting down Derby engine
+Sun Oct 27 16:19:12 NZDT 2024: Shutting down Derby engine
 ----------------------------------------------------------------
-Sun Oct 27 15:29:33 NZDT 2024:
-Shutting down instance a816c00e-0192-cbcd-f17f-000017f54036 on database directory C:\Users\nyima\OneDrive\UNI Files\Chess\ChessDB_Ebd with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
+Sun Oct 27 16:19:13 NZDT 2024:
+Shutting down instance a816c00e-0192-cbfc-006b-000017f54036 on database directory C:\Users\nyima\OneDrive\UNI Files\Chess\ChessDB_Ebd with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@30946e09 
 ----------------------------------------------------------------

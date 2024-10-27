@@ -28,6 +28,10 @@ public class StartGamePanel extends JPanel {
 
         button.addActionListener(e -> {
             if (username.getText().matches("[a-zA-Z0-9]+")) { // get valid username
+                if (!current.userExists(username.getText())) // if the user doesnt exist prompt user that new user is being created
+                {
+                    JOptionPane.showMessageDialog(this, "User not found in database. New user will be created");
+                }
                 if (currentIsWhite) { // set users
                     white = current;
                     black = new User(db);
@@ -39,16 +43,18 @@ public class StartGamePanel extends JPanel {
                 }
                 System.out.println("White player: " + white.username);
                 System.out.println("Black player: " + black.username);
-                
+
                 //new game
                 JFrame gameFrame = new JFrame("Chess Game");
                 gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 gameFrame.add(new GamePanel(white, black, db));
                 gameFrame.setSize(1000, 1000);
                 gameFrame.setVisible(true);
+            } else { // prompt for correct input
+                JOptionPane.showMessageDialog(this, "Invalid username. Please enter only characters and numbers");
             }
         });
-        
+
         //add components
         add(box);
         add(new JLabel("Opponent Username:"));

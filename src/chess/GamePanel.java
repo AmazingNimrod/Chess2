@@ -54,7 +54,13 @@ public class GamePanel extends JPanel {
         paintPieces(g); // draw pieces
         showMoves(g); // highlight valid moves
         showCheck(g); // highlight king in check
-
+        // end game
+        if (this.gameState != "none"){
+            g.setColor(new Color(100, 100, 100, 200));
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g.setColor(Color.RED);
+            g.drawString(gameState.toUpperCase(), 500, 500);
+        }
     }
 
     //methods to convert chess move to x,y
@@ -154,7 +160,7 @@ public class GamePanel extends JPanel {
             if (!board.whiteTurn) {
                 System.out.println("WHITE WINS");
                 result = whitePlayer.username + " wins";
-
+                
             } else {
                 System.out.println("BLACK WINS");
                 result = blackPlayer.username + " wins";
